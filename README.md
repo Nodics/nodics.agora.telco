@@ -7,7 +7,7 @@ UI package and not a backend module.
 ## Ownership
 
 - Owns telco storefront presentation, responsive UX, browser state, and tests.
-- Consumes renderer contracts from `domain.commerce.ui`.
+- Owns the renderer contract required by this reusable storefront template.
 - Consumes telco content, device/plan product, price, inventory, media, and
   publishing data from Kickoff/Online backend APIs.
 - Must not carry Apparel or Electronics renderer implementations.
