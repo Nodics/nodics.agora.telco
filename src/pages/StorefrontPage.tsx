@@ -353,7 +353,7 @@ export function StorefrontPage() {
       })
       .catch(() => {
         if (controller.signal.aborted) return;
-        setCmsStatus('Published Agora experience is unavailable; showing local storefront fallback.');
+        setCmsStatus('Published Agora experience is not available yet.');
       });
     return () => controller.abort();
   }, []);
