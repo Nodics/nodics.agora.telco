@@ -16,7 +16,7 @@ export interface AgoraRuntimeConfig {
   readonly customerEmail?: string;
 }
 
-const localStorefrontOrigin = typeof window !== 'undefined' && window.location?.origin ? window.location.origin : 'http://localhost:5173';
+const localStorefrontOrigin = typeof window !== 'undefined' && window.location?.origin ? window.location.origin : 'http://localhost:3500';
 
 export const runtimeConfig: AgoraRuntimeConfig = Object.freeze({
   cmsBaseUrl: import.meta.env.VITE_STOREFRONT_CMS_BASE_URL ?? 'http://localhost:4314',

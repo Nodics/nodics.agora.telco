@@ -24,6 +24,11 @@ payment result -> order confirmation/history -> lifecycle request surfaces
 Page sections, components, media and product data must be content/API driven.
 Local fallback data is allowed only for safe development and tests.
 
+## Local development
+
+Run `npm run dev` and open http://localhost:3500.
+Kickoff local topology starts this storefront on the same port.
+
 ## Verification
 
 ```bash
