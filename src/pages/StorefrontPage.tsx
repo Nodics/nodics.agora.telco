@@ -86,7 +86,7 @@ import {
   type AgoraHeroSlide,
   type AgoraLinkAction,
 } from "../cms/agoraHomeContent";
-import { resolveCmsPage } from "../cms/cmsClient";
+import { CmsPageDeliveryError, resolveCmsPage } from "../cms/cmsClient";
 import type { CmsResolvedPageContract } from "../cms/cmsContract";
 import { productAvailabilityLabel } from "../commerce/availabilityPresentation";
 import { productBrandLabel } from "../commerce/productPresentation";
@@ -620,6 +620,7 @@ export function StorefrontPage() {
   const [error, setError] = useState<string>();
   const [cmsPage, setCmsPage] = useState<CmsResolvedPageContract>();
   const [cmsStatus, setCmsStatus] = useState<string>();
+  const [cmsUnavailable, setCmsUnavailable] = useState(false);
   const cart = useLocalCart(
     `nodics.cart.${runtimeConfig.enterpriseCode}.${runtimeConfig.storeCode}`,
   );
@@ -693,6 +694,7 @@ export function StorefrontPage() {
   useEffect(() => {
     const controller = new AbortController();
     setCmsStatus("Loading published experience…");
+    setCmsUnavailable(false);
     void resolveCmsPage({
       cmsBaseUrl: runtimeConfig.cmsBaseUrl,
       enterpriseCode: runtimeConfig.enterpriseCode,
@@ -707,9 +709,17 @@ export function StorefrontPage() {
         setCmsPage(page);
         setCmsStatus(undefined);
       })
-      .catch(() => {
+      .catch((failure: unknown) => {
         if (controller.signal.aborted) return;
-        setCmsStatus("Published Agora experience is not available yet.");
+        const unavailable =
+          !(failure instanceof CmsPageDeliveryError) ||
+          failure.kind !== "not-found";
+        setCmsUnavailable(unavailable);
+        setCmsStatus(
+          unavailable
+            ? "The storefront service is temporarily unavailable."
+            : "Published Agora experience is not available yet.",
+        );
       });
     return () => controller.abort();
   }, []);
@@ -1715,6 +1725,23 @@ export function StorefrontPage() {
   const selectedColorOptions = productColorOptions(selected);
   const selectedSizeOptions = productSizeOptions(selected, selectedColourCode);
   const useCmsHeroImages = true;
+
+  if (cmsUnavailable) {
+    return (
+      <main className="agora-shell">
+        <section className="storefront-unpublished-state" role="alert">
+          <NodicsBrand subtitle="AGORA" />
+          <h1>The storefront is temporarily unavailable.</h1>
+          <p>
+            We cannot reach the service right now. Please try again shortly.
+          </p>
+          <button type="button" onClick={() => window.location.reload()}>
+            Try again
+          </button>
+        </section>
+      </main>
+    );
+  }
 
   return (
     <main className="agora-shell">
