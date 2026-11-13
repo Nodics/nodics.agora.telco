@@ -18,7 +18,8 @@ const config: AgoraRuntimeConfig = {
   tenantCode: "default",
   siteCode: "agora",
   channel: "web",
-  storeCode: "agoraMainStore",
+  salesChannelCode: "agoraTelcoWeb",
+  storeCode: "agoraTelcoStore",
   locale: "en",
   requestTimeoutMs: 1000,
 };
